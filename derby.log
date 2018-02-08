@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Wed Jan 31 08:36:57 COT 2018:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instancia a816c00e-0161-4c6f-4aea-00000532df10 
+en el directorio de base de datos C:\Users\User\Documents\Sebastian\Universidad\Semestre 6\Moros\Moros\derbyDB  con el cargador de clases sun.misc.Launcher$AppClassLoader@4dc63996
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_101-b13
+user.dir=C:\Users\User\Documents\Sebastian\Universidad\Semestre 6\Moros\Moros
+derby.system.home=null
+Cargador de clases de base de datos iniciado - derby.database.classpath=''
