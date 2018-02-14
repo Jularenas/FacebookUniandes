@@ -32,7 +32,7 @@ public class facebook {
 	private String[] Palabras_clave;
 
 	private PrintWriter pw_salida;
-	private PrintWriter pw_salida_prueba;
+//	private PrintWriter pw_salida_prueba;
 
 	//Conexion con base de datos
 	Connection conn = null;
@@ -76,7 +76,7 @@ public class facebook {
 
 		String fileName = "C:/Users/User/Documents/Lina Moros/facebook" + "-" + generarFechaDeExtraccion() + ".csv";
 		pw_salida = new PrintWriter(new File(fileName));
-		pw_salida_prueba = new PrintWriter(new File(fileNamePrueba));
+//		pw_salida_prueba = new PrintWriter(new File(fileNamePrueba));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class facebook {
 	 * @throws IOException
 	 */
 	public void escribirTitulosColumnas() throws IOException{
-		pw_salida.println("Actor,Fuente,Fecha de la publica,Publicaci�n\n");		
+		pw_salida.println("Actor,Fuente,Fecha de la publica,Publicacion\n");		
 	}
 
 	/**
@@ -237,10 +237,14 @@ public class facebook {
 			}
 			if(contenido != null){
 				CharSequence cs = "\n";
+				CharSequence cs2 = ",";
 				if(contenido.contains(cs)){
 					contenido = contenido.replace(cs, ". ");
 				}
-				pw_salida_prueba.println(actor + "," + fecha +"," + contenido + "\n");
+				if(contenido.contains(cs2)){
+					contenido = contenido.replace(cs2, "; ");
+				}
+//				pw_salida_prueba.println(actor + "," + fecha +"," + contenido + "\n");
 
 
 				for(int j = 0; j < Palabras_clave.length && !contiene; j++){
