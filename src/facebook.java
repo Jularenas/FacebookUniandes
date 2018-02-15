@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -237,20 +238,29 @@ public class facebook {
 			}
 			if(contenido != null){
 				CharSequence cs = "\n";
+<<<<<<< HEAD
 				CharSequence cs2 = ";";
 //				if(contenido.contains(cs)){
 //					contenido = contenido.replace(cs, ". ");
 //				}
 //				if(contenido.contains(cs2)){
 //					contenido = contenido.replace(cs2, ", ");
+=======
+//				CharSequence cs2 = ",";
+				if(contenido.contains(cs)){
+					contenido = contenido.replace(cs, ". ");
+				}
+//				if(contenido.contains(cs2)){
+//					contenido = contenido.replace(cs2, "; ");
+>>>>>>> 485622f8da87068fc2b44067bb47f0bc3145a49b
 //				}
 //				pw_salida_prueba.println(actor + "," + fecha +"," + contenido + "\n");
 
 
 				for(int j = 0; j < Palabras_clave.length && !contiene; j++){
 					String palabra = Palabras_clave[j];
-					cs = palabra;
-					if(org.apache.commons.lang3.StringUtils.containsIgnoreCase(contenido,cs)) contiene = true;
+					String csString = palabra;
+					if(org.apache.commons.lang.StringUtils.containsIgnoreCase(contenido,csString)) contiene = true;
 					
 				}
 				if(contiene) {
@@ -258,9 +268,12 @@ public class facebook {
 					if(contenido.contains(cs)){
 						contenido = contenido.replace(cs, ". ");
 					}
+<<<<<<< HEAD
 					if(contenido.contains(cs2)){
 						contenido = contenido.replace(cs2, ", ");
 					}
+=======
+>>>>>>> 485622f8da87068fc2b44067bb47f0bc3145a49b
 					escribirEntrada(actor + ";Facebook;" + fecha + ";" + contenido + "\n" );
 				}	
 			}	
