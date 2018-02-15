@@ -105,7 +105,7 @@ public class facebook {
 	 * @throws IOException
 	 */
 	public void escribirTitulosColumnas() throws IOException{
-		pw_salida.println("Actor,Fuente,Fecha de la publica,Publicacion\n");		
+		pw_salida.println("Actor;Fuente;Fecha de la publica;Publicacion\n");		
 	}
 
 	/**
@@ -237,13 +237,13 @@ public class facebook {
 			}
 			if(contenido != null){
 				CharSequence cs = "\n";
-				CharSequence cs2 = ",";
-				if(contenido.contains(cs)){
-					contenido = contenido.replace(cs, ". ");
-				}
-				if(contenido.contains(cs2)){
-					contenido = contenido.replace(cs2, "; ");
-				}
+				CharSequence cs2 = ";";
+//				if(contenido.contains(cs)){
+//					contenido = contenido.replace(cs, ". ");
+//				}
+//				if(contenido.contains(cs2)){
+//					contenido = contenido.replace(cs2, ", ");
+//				}
 //				pw_salida_prueba.println(actor + "," + fecha +"," + contenido + "\n");
 
 
@@ -258,7 +258,10 @@ public class facebook {
 					if(contenido.contains(cs)){
 						contenido = contenido.replace(cs, ". ");
 					}
-					escribirEntrada(actor + ",Facebook," + fecha + "," + contenido + "\n" );
+					if(contenido.contains(cs2)){
+						contenido = contenido.replace(cs2, ", ");
+					}
+					escribirEntrada(actor + ";Facebook;" + fecha + ";" + contenido + "\n" );
 				}	
 			}	
 		}
