@@ -1,3 +1,4 @@
+import java.awt.GridLayout;
 import java.io.BufferedReader;
 
 
@@ -16,6 +17,9 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -96,7 +100,8 @@ public class facebook {
 	 */
 	public void leerInfo() throws IOException, ParseException, java.text.ParseException{
 		BufferedReader info = generarArchivoDeLecturaDeInformacion();
-		token = info.readLine();
+//		token = info.readLine();
+		token = JOptionPane.showInputDialog("Inserte el token de Fcaebook");
 		Palabras_clave = info.readLine().split(",");
 		escribirTitulosColumnas();
 		crearTodasLasSolicitudes(info);
@@ -333,29 +338,40 @@ public class facebook {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		JFrame frame = new JFrame();
+		JButton btnAgregar = new JButton("Agregar actor a la lista");
+		JButton btnEjecutar = new JButton("Ejecutar bésqueda");
+		frame.setLayout(new GridLayout(1, 2));
+		frame.add(btnEjecutar);
+		frame.add(btnAgregar);
+		frame.setVisible(true);
+		frame.setSize(200, 80);
+		
+		
 
-		try {
-
-			facebook clasePrincipal = new facebook();
-
-		} 
-		catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//
+//			facebook clasePrincipal = new facebook();
+//
+//		} 
+//		catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (java.text.ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		catch (InstantiationException | IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
