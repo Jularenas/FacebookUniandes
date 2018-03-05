@@ -6,6 +6,7 @@ import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -60,18 +61,39 @@ public class Main {
 	
 	public static void main(String[] args)
 	{
-		Scanner s= new Scanner(System.in);
-		String token=s.nextLine();
-		String id_page=s.nextLine();
-		Main m= new Main(token);
-		try {
-			m.enviarSolicitud(m.crearSolicitudAlAPI(id_page));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try(PrintWriter op= new PrintWriter(new FileWriter(new File("./data/responses"))))
+		{
+			while(true){
+				Scanner s= new Scanner(System.in);
+				String token=s.nextLine();
+				String id_page=s.nextLine();
+				
+				op.println(token);
+				op.println(id_page);
+				op.println("------------------------");
+				op.println("------------------------");
+				op.println("------------------------");
+				op.println("------------------------");
+				
+				Main m= new Main(token);
+				try {
+					String response=m.enviarSolicitud(m.crearSolicitudAlAPI(id_page));
+					String[] responseSegments=response.split("},");
+					for (int i = 0; i < responseSegments.length; i++) {
+						op.println(responseSegments[i]);
+					}
+					} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+		}
+		catch(Exception e)
+		{
+			
 		}
 	}
 
