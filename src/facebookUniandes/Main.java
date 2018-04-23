@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -32,10 +33,27 @@ public class Main {
 	
 	private String token;
 	
+	private int[] likesPorHora;
+	
 	public Main(String token){
 		this.token=token;
+		likesPorHora= new int[24];
+		for (int i = 0; i < likesPorHora.length; i++) {
+			likesPorHora[i]=0;
+		}
+	}
+	public void addLikes(int i,int val)
+	{
+		likesPorHora[i]+=val;
 	}
 	
+	
+	public int[] getLikesPorHora() {
+		return likesPorHora;
+	}
+	public void setLikesPorHora(int[] likesPorHora) {
+		this.likesPorHora = likesPorHora;
+	}
 	public URL crearSolicitudAlAPI(String id_page ) throws MalformedURLException{
 		URL url = new URL("https://graph.facebook.com/v2.11/" +  id_page +"/posts?format=json&limit=100&access_token=" + token);
 		//		System.out.println(url);
@@ -58,6 +76,11 @@ public class Main {
 		return resultado;
 
 	}
+	public URL crearSolicitudReacciones(String id_post) throws MalformedURLException
+	{
+		URL url= new URL("https://graph.facebook.com/v2.11/"+id_post+"/reactions?summary=total_count&access_token=" + token);
+		return url;
+	}
 	
 	public static void main(String[] args)
 	{
@@ -65,22 +88,53 @@ public class Main {
 		{
 			while(true){
 				Scanner s= new Scanner(System.in);
+				
 				String token=s.nextLine();
 				String id_page=s.nextLine();
 				
-				op.println(token);
-				op.println(id_page);
-				op.println("------------------------");
-				op.println("------------------------");
-				op.println("------------------------");
-				op.println("------------------------");
+//				op.println(token);
+//				op.println(id_page);
+//				op.println("------------------------");
+//				op.println("------------------------");
+//				op.println("------------------------");
+				//EAACEdEose0cBAGd10wBgwaUMPoUkApTQg1aabSll2VMDwkR3NZByAY8QAKLgVu3GmkZBRtgyuapRHCR0YXJbhd3QeWZAcjKj2ML9cYiOIav47hy0QbiJ2UpodCbTd9UZCk88RFWCiIKBIsLKHMuBEZBTTbTv4bdIGZCOTQRhE2o9NOwDtfmqkQunT5fpuwTU0ZD
+				//913494512115899
+//				op.println("------------------------");
 				
 				Main m= new Main(token);
 				try {
 					String response=m.enviarSolicitud(m.crearSolicitudAlAPI(id_page));
-					String[] responseSegments=response.split("},");
-					for (int i = 0; i < responseSegments.length; i++) {
-						op.println(responseSegments[i]);
+					System.out.println("parsear");
+					JSONParser parser= new JSONParser();
+					Object obj=parser.parse(response);
+					JSONObject object=(JSONObject)obj;
+					JSONArray array=(JSONArray)object.get("data");
+					Iterator<JSONObject>iter=array.iterator();
+					while(iter.hasNext())
+					{
+						System.out.println("iterData");
+						JSONObject toParse=iter.next();
+						//Object obj1=parser.parse("");
+						System.out.println(toParse);
+						JSONObject object1=(JSONObject)toParse;
+						String id=(String)object1.get("id");
+						String fecha=(String)object1.get("created_time");
+						String time=fecha.split("T")[1];
+						String timeSub=time.substring(0,1);
+						int index=Integer.parseInt(timeSub);
+						String response2=m.enviarSolicitud(m.crearSolicitudReacciones(id));
+						Object obj3=parser.parse(response2);
+						JSONObject object3=(JSONObject)obj3;
+						JSONObject object4=(JSONObject)object3.get("summary");
+						long likes=(long)object4.get("total_count");
+						int likeCount=(int)likes;
+						m.addLikes(index, likeCount);
+						
+					}
+					op.println(response);
+					int[]lks=m.getLikesPorHora();
+					for (int i = 0; i < lks.length; i++) {
+						System.out.println(lks[i]);
 					}
 					} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -93,7 +147,7 @@ public class Main {
 		}
 		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 	}
 
