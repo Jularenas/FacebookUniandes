@@ -35,6 +35,9 @@ public class Main {
 	
 	private int[] likesPorHora;
 	
+	//confesiones,IAYC,arquiDis,decanatura,viviendaUniversitaria,culturaUniandes,administracionUniandes,BibliotecaUniandes
+	private String []pages={"1424071031165005","635091926628905","453864577993235","352563524830861","588480231191039","1805228329757023","379341528792135","141441056056913","250051698485664"};
+	
 	public Main(String token){
 		this.token=token;
 		likesPorHora= new int[24];
@@ -55,7 +58,7 @@ public class Main {
 		this.likesPorHora = likesPorHora;
 	}
 	public URL crearSolicitudAlAPI(String id_page ) throws MalformedURLException{
-		URL url = new URL("https://graph.facebook.com/v2.11/" +  id_page +"/posts?format=json&limit=100&access_token=" + token);
+		URL url = new URL("https://graph.facebook.com/v2.11/" +  id_page +"/posts?format=json&access_token=" + token);
 		//		System.out.println(url);
 		return url;
 	}
@@ -84,12 +87,13 @@ public class Main {
 	
 	public static void main(String[] args)
 	{
+		Scanner s= new Scanner(System.in);
 		try(PrintWriter op= new PrintWriter(new FileWriter(new File("./data/responses"))))
 		{
+			String token=s.nextLine();
+			Main m= new Main(token);
 			while(true){
-				Scanner s= new Scanner(System.in);
 				
-				String token=s.nextLine();
 				String id_page=s.nextLine();
 				
 //				op.println(token);
@@ -101,7 +105,6 @@ public class Main {
 				//913494512115899
 //				op.println("------------------------");
 				
-				Main m= new Main(token);
 				try {
 					String response=m.enviarSolicitud(m.crearSolicitudAlAPI(id_page));
 					System.out.println("parsear");
@@ -112,16 +115,17 @@ public class Main {
 					Iterator<JSONObject>iter=array.iterator();
 					while(iter.hasNext())
 					{
-						System.out.println("iterData");
+						//System.out.println("iterData");
 						JSONObject toParse=iter.next();
 						//Object obj1=parser.parse("");
-						System.out.println(toParse);
+						//System.out.println(toParse);
 						JSONObject object1=(JSONObject)toParse;
 						String id=(String)object1.get("id");
 						String fecha=(String)object1.get("created_time");
 						String time=fecha.split("T")[1];
-						String timeSub=time.substring(0,1);
+						String timeSub=time.substring(0,2);
 						int index=Integer.parseInt(timeSub);
+						System.out.println(index);
 						String response2=m.enviarSolicitud(m.crearSolicitudReacciones(id));
 						Object obj3=parser.parse(response2);
 						JSONObject object3=(JSONObject)obj3;
