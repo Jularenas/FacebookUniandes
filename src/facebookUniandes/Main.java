@@ -34,13 +34,28 @@ public class Main {
 	private String token;
 	
 	private int[] likesPorHora;
+	private int[] commentsPorHora;
+	//1424071031165005,..
+	//confesiones,IAYC,arquiDis,decanatura,viviendaUniversitaria,culturaUniandes,administracionUniandes,BibliotecaUniandes,academcioCEU,medicinaUniandes
+	private String []pages={"","635091926628905","453864577993235","352563524830861","588480231191039","1805228329757023","379341528792135","141441056056913","250051698485664","108619413135707","1446939265541992"};
 	
-	//confesiones,IAYC,arquiDis,decanatura,viviendaUniversitaria,culturaUniandes,administracionUniandes,BibliotecaUniandes
-	private String []pages={"1424071031165005","635091926628905","453864577993235","352563524830861","588480231191039","1805228329757023","379341528792135","141441056056913","250051698485664"};
+	public String[] getPages() {
+		return pages;
+	}
+	public void setPages(String[] pages) {
+		this.pages = pages;
+	}
 	
+	public int[] getCommentsPorHora() {
+		return commentsPorHora;
+	}
+	public void setCommentsPorHora(int[] commentsPorHora) {
+		this.commentsPorHora = commentsPorHora;
+	}
 	public Main(String token){
 		this.token=token;
 		likesPorHora= new int[24];
+		commentsPorHora= new int[24];
 		for (int i = 0; i < likesPorHora.length; i++) {
 			likesPorHora[i]=0;
 		}
@@ -48,6 +63,10 @@ public class Main {
 	public void addLikes(int i,int val)
 	{
 		likesPorHora[i]+=val;
+	}
+	public void addComments(int i,int val)
+	{
+		commentsPorHora[i]+=val;
 	}
 	
 	
@@ -84,18 +103,25 @@ public class Main {
 		URL url= new URL("https://graph.facebook.com/v2.11/"+id_post+"/reactions?summary=total_count&access_token=" + token);
 		return url;
 	}
+	public URL crearSolicitudComentarios(String id_post) throws MalformedURLException
+	{
+		URL url= new URL("https://graph.facebook.com/v2.11/"+id_post+"/comments?summary=1&access_token="+token);
+		return url;
+	}
 	
 	public static void main(String[] args)
 	{
 		Scanner s= new Scanner(System.in);
-		try(PrintWriter op= new PrintWriter(new FileWriter(new File("./data/responses"))))
+		try(PrintWriter op= new PrintWriter(new FileWriter(new File("./data/responses")));PrintWriter op2= new PrintWriter(new FileWriter(new File("./data/info.csv"))))
 		{
 			String token=s.nextLine();
 			Main m= new Main(token);
-			while(true){
+			String []pags=m.getPages();
+			for (int k = 0; k < pags.length; k++) {
+//			while(true){
 				
-				String id_page=s.nextLine();
-				
+//				String id_page=s.nextLine();
+				String id_page=pags[k];
 //				op.println(token);
 //				op.println(id_page);
 //				op.println("------------------------");
@@ -126,6 +152,10 @@ public class Main {
 						String timeSub=time.substring(0,2);
 						int index=Integer.parseInt(timeSub);
 						System.out.println(index);
+						
+						//
+						//reactions
+						//
 						String response2=m.enviarSolicitud(m.crearSolicitudReacciones(id));
 						Object obj3=parser.parse(response2);
 						JSONObject object3=(JSONObject)obj3;
@@ -134,25 +164,50 @@ public class Main {
 						int likeCount=(int)likes;
 						m.addLikes(index, likeCount);
 						
+						//
+						//Comments
+						//
+						String response3=m.enviarSolicitud(m.crearSolicitudComentarios(id));
+						Object obj4=parser.parse(response3);
+						JSONObject object5=(JSONObject)obj4;
+						JSONObject object6=(JSONObject)object5.get("summary");
+						long comments=(long)object6.get("total_count");
+						int commCount=(int)comments;
+						m.addComments(index, commCount);
 					}
 					op.println(response);
 					int[]lks=m.getLikesPorHora();
 					for (int i = 0; i < lks.length; i++) {
 						System.out.println(lks[i]);
+						//op2.println(lks[i]);
 					}
 					} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					continue;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					continue;
 				}
 				}
+//		}
+		
+		int[]lks=m.getLikesPorHora();
+		int[]comms=m.getCommentsPorHora();
+		for (int i = 0; i < lks.length; i++) {
+			System.out.println(lks[i]);
+			op2.println(lks[i]);
+		}
+		for (int i = 0; i < comms.length; i++) {
+			op2.println(comms[i]);
+		}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
 	}
 
 }
