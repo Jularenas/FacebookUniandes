@@ -141,17 +141,22 @@ public class Main {
 					Iterator<JSONObject>iter=array.iterator();
 					while(iter.hasNext())
 					{
+						JSONObject post= new JSONObject(); 
 						//System.out.println("iterData");
 						JSONObject toParse=iter.next();
 						//Object obj1=parser.parse("");
 						//System.out.println(toParse);
 						JSONObject object1=(JSONObject)toParse;
+						
+						String message=(String)object1.get("message");
+						
 						String id=(String)object1.get("id");
 						String fecha=(String)object1.get("created_time");
 						String time=fecha.split("T")[1];
 						String timeSub=time.substring(0,2);
 						int index=Integer.parseInt(timeSub);
 						System.out.println(index);
+						
 						
 						//
 						//reactions
@@ -174,6 +179,16 @@ public class Main {
 						long comments=(long)object6.get("total_count");
 						int commCount=(int)comments;
 						m.addComments(index, commCount);
+						
+						//
+						//Data
+						//
+						post.put("msg",message);
+						post.put("reaction_count",likeCount);
+						post.put("comment_count",commCount);
+						post.put("time",fecha);
+						
+						op.println(post.toJSONString());
 					}
 					op.println(response);
 					int[]lks=m.getLikesPorHora();
