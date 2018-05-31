@@ -176,6 +176,7 @@ public class Main {
 						Object obj4=parser.parse(response3);
 						JSONObject object5=(JSONObject)obj4;
 						JSONObject object6=(JSONObject)object5.get("summary");
+						JSONArray arrayComments=(JSONArray)object5.get("data");
 						long comments=(long)object6.get("total_count");
 						int commCount=(int)comments;
 						m.addComments(index, commCount);
@@ -187,6 +188,7 @@ public class Main {
 						post.put("reaction_count",likeCount);
 						post.put("comment_count",commCount);
 						post.put("time",fecha);
+						post.put("comments", arrayComments);
 						
 						op.println(post.toJSONString());
 					}
